@@ -170,7 +170,7 @@ class RediSearchEngine extends Engine
 
         $collection = collect($keys);
 
-        $collectionCleaned = $collection->map(function ($item, $key) {
+        $collectionCleaned = $collection->map(function ($item, $key) use ($model) {
             return str_replace($model->searchableAs(),'', $item);
         });
 
@@ -183,12 +183,13 @@ class RediSearchEngine extends Engine
 
         return Collection::make($documents)
             ->map(function ($hit) use ($model, $models) {
-                $key = $hit->id;
+                $key = str_replace($model->searchableAs(),'', $hit->id);
                 if (isset($models[$key])) {
                     return $models[$key];
                 }
             })->filter();
     }
+
 
     /**
      * Get the total count from a raw result returned by the engine.
