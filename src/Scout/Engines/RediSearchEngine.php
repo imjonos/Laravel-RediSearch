@@ -167,6 +167,15 @@ class RediSearchEngine extends Engine
             ->pluck('id')
             ->values()
             ->all();
+
+        $collection = collect($keys);
+
+        $collectionCleaned = $collection->map(function ($item, $key) {
+            return str_replace($model->searchableAs(),'', $item);
+        });
+
+        $keys = $collectionCleaned->all();
+
         $models = $model
             ->whereIn($model->getQualifiedKeyName(), $keys)
             ->get()
