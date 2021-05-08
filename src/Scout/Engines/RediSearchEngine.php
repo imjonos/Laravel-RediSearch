@@ -129,17 +129,17 @@ class RediSearchEngine extends Engine
      */
     public function paginate(Builder $builder, $perPage, $page)
     {
-		$index = (new Index($this->redisRawClient, $builder->index ?? $builder->model->searchableAs()));
-
-		if ($builder->callback) {
-			$advanced_search = (call_user_func($builder->callback, $index));
-			return collect(($advanced_search)
-				->limit($page, $perPage)
+	$index = (new Index($this->redisRawClient, $builder->index ?? $builder->model->searchableAs()));
+	$offset = ($page*$perPage) - $perPage;
+	if ($builder->callback) {
+		$advanced_search = (call_user_func($builder->callback, $index));
+		return collect(($advanced_search)
+				->limit($offset, $perPage)
 				->search($builder->query));
-		}
+	}
 
         return collect(($index)
-            ->limit($page, $perPage)
+            ->limit($offset, $perPage)
             ->search($builder->query));
     }
 
