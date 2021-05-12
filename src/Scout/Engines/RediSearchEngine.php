@@ -62,7 +62,7 @@ class RediSearchEngine extends Engine
 
         $models
             ->each(function ($item) use ($index, $model) {
-                $document = $index->makeDocument($item->getKey());
+                $document = $index->makeDocument($model->searchableAs().$item->getKey());
                 foreach ($item->toSearchableArray() as $name => $value) {
                     if ($name !== $model->getKeyName()) {
                         $value = $value ?? '';
