@@ -91,7 +91,7 @@ class RediSearchEngine extends Engine
         $index = new Index($this->redisRawClient, $models->first()->searchableAs());
         $models
             ->map(function ($model) {
-                return $model->getKey();
+                return $model->searchableAs().$model->getKey();
             })
             ->values()
             ->each(function ($key) use ($index) {
