@@ -27,7 +27,7 @@ class RediSearchEngine extends Engine
         $this->redisRawClient = $redisRawClient;
     }
 
-    /**
+   /**
      * Update the given model in the index.
      *
      * @param  \Illuminate\Database\Eloquent\Collection $models
