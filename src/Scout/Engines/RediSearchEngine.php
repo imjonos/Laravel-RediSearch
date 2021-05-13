@@ -36,7 +36,7 @@ class RediSearchEngine extends Engine
     public function update($models)
     {
         $model = $models->first();
-        $index = new Index($this->redisRawClient, $model->first()->searchableAs());
+        $index = new Index($this->redisRawClient, $model->searchableAs());
 
         foreach ($model->searchableSchema() as $name => $value) {
 
