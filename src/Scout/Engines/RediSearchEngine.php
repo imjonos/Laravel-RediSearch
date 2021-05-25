@@ -56,17 +56,20 @@ class RediSearchEngine extends Engine
                     continue;
                 }
 
-                $index->addTextField($name);
+                $index->addTextField($name,1.0, true);
             }
         }
 
+        if (!$index->exists()) $index->create();
+
         $models
-            ->each(function ($item) use ($index, $model) {
+            ->each(function ($itemModel) use ($index, $model) {
+                $item = $itemModel->fresh();
                 $document = $index->makeDocument($model->searchableAs().$item->getKey());
                 foreach ($item->toSearchableArray() as $name => $value) {
                     if ($name !== $model->getKeyName()) {
                         $value = $value ?? '';
-                        $document->$name->setValue($value);
+                        $document->{$name}->setValue($value);
                     }
                 }
                 try {
@@ -79,6 +82,7 @@ class RediSearchEngine extends Engine
 
             });
     }
+
 
     /**
      * Remove the given model from the index.
